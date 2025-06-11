@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="es">
+
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title class="h1">Formaciones de Jugadores</title >
+  <link rel="stylesheet" href="./equipo.component.css">
+</head>
+
+
+
+<body>
+
+  <div class="club-logo-container">
+    <img *ngIf="clubLogoUrl" [src]="clubLogoUrl" alt="Logotipo del Club" class="club-logo falling-logo" />
+  </div>
+  
+  <h1 class="falling-title">Formaciones de Jugadores</h1>
+  
+
+  <div class="container" style="width: fit-content; max-width: 100%; background-image: url('/assets/FondoF.jpeg'); padding: 20px; border-radius: 8px; color: #f5f5f5;" class="falling-title">
+
+  <div *ngFor="let deporte of deportes" [id]="deporte.nombre" class="formation-container">
+    <div class="field">
+      <div *ngFor="let posicion of deporte.posiciones" class="card" (click)="abrirFormulario(posicion)">
+        <div class="image-container">
+          <img 
+            *ngIf="fotosJugadores[posicion]" 
+            [src]="fotosJugadores[posicion]" 
+            alt="Foto del jugador" 
+            class="player-photo" 
+          />
+          <img 
+          [src]="clubLogoUrl" 
+          alt="Logotipo del Club" 
+          class="club-logo-overlay" 
+        />
+          <img 
+            *ngIf="!fotosJugadores[posicion] && clubLogoUrl" 
+            [src]="clubLogoUrl" 
+            alt="Logotipo del Club" 
+            class="club-logo-overlay" 
+          />
+        </div>
+        <div class="position-label">{{ posicion }}</div>
+      </div>
+    </div>
+    <div class="bench">
+      <div *ngFor="let banca of deporte.banca" class="card" (click)="abrirFormulario('Banca')">
+        <img 
+          *ngIf="fotosJugadores['Banca']" 
+          [src]="fotosJugadores['Banca']" 
+          alt="Foto del jugador" 
+          class="player-photo" 
+        />
+        <img 
+          *ngIf="!fotosJugadores['Banca'] && clubLogoUrl" 
+          [src]="clubLogoUrl" 
+          alt="Logotipo del Club" 
+          class="club-logo-overlay" 
+        />
+        <div class="position-label">Banca</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Formulario emergente -->
+  <div *ngIf="formularioVisible" class="form-popup">
+    <h3>Registrar Jugador en {{ posicionSeleccionada }}</h3>
+    <form (ngSubmit)="guardarJugador()" enctype="multipart/form-data">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" [(ngModel)]="jugador.nombre_completo" name="nombre_completo" required />
+
+      <label for="edad">Fecha de Nacimiento:</label>
+      <input type="date" id="edad" [(ngModel)]="jugador.fecha_nacimiento" name="fecha_nacimiento" required />
+
+      <label for="sexo">Sexo:</label>
+      <select id="sexo" [(ngModel)]="jugador.sexo" name="sexo" required>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+      </select>
+
+      <label for="foto">Foto del Jugador:</label>
+      <input type="file" id="foto" (change)="cargarFoto($event)" />
+
+      <button type="submit">Guardar</button>
+      <button type="button" (click)="cerrarFormulario()">Cancelar</button>
+    </form>
+  </div>
+
+<!-- Formulario emergente -->
+<div *ngIf="formularioRecuperado" class="form-popup">
+  <h3>Ver Jugador {{ posicionSeleccionada }}</h3>
+
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="foto" >Foto</label >
+      <img id="foto" [src]="jugadorRecuperado.foto" alt="Foto del jugador" class= 'club-logo'>
+    </div>
+
+    <div class="form-group">
+      <label for="nombre_completo">Nombre Completo</label>
+      <input type="text" id="nombre_completo" name="nombre_completo" [value]="jugadorRecuperado.nombre_completo" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="sexo">Sexo</label>
+      <select id="sexo" name="sexo" [value]="jugadorRecuperado.sexo" disabled>
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+      <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" [value]="jugadorRecuperado.fecha_nacimiento" readonly>
+    </div>
+
+
+
+    <div class="form-group">
+      <label for="apodo">Apodo</label>
+      <input type="text" id="apodo" name="apodo" [value]="jugadorRecuperado.apodo" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="posicion">Posición</label>
+      <input type="text" id="posicion" name="posicion" [value]="jugadorRecuperado.posicion" readonly>
+    </div>
+
+    
+
+    <div class="form-group">
+      <label for="ciudad_nacimiento">Ciudad de Nacimiento</label>
+      <input type="text" id="ciudad_nacimiento" name="ciudad_nacimiento" [value]="jugadorRecuperado.ciudad_nacimiento" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="anios_experiencia">Años de Experiencia</label>
+      <input type="number" id="anios_experiencia" name="anios_experiencia" [value]="jugadorRecuperado.anios_experiencia" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="amonestaciones">Amonestaciones</label>
+      <input type="number" id="amonestaciones" name="amonestaciones" [value]="jugadorRecuperado.amonestaciones" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="puntos_acumulados">Puntos Acumulados</label>
+      <input type="number" id="puntos_acumulados" name="puntos_acumulados" [value]="jugadorRecuperado.puntos_acumulados" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" name="correo" [value]="jugadorRecuperado.correo" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="pasatiempos">Pasatiempos</label>
+      <input id="pasatiempos" name="pasatiempos" rows="3" [value]="jugadorRecuperado.pasatiempos" >
+    </div>
+
+    <div class="form-group">
+      <label for="musica_favorita">Música Favorita</label>
+      <input id="musica_favorita" name="musica_favorita" rows="3" [value]="jugadorRecuperado.musica_favorita" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="redes_sociales">Redes Sociales</label>
+      <input id="redes_sociales" name="redes_sociales" rows="3" [value]="jugadorRecuperado.redes_sociales" readonly>
+    </div>
+  </div>
+
+
+  <div class="form-buttons">
+    <button type="submit">Guardar</button>
+    <button type="button" (click)="cerrarFormulario2()">Cerrar</button>
+  </div>
+</div>
+
+
+</body>
+
+
+</html>
+

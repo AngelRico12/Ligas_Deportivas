@@ -1,0 +1,68 @@
+<div class="register-club-container">
+  <h2>Registrar un Nuevo Club</h2>
+  
+  <form (ngSubmit)="onSubmit()">
+    <!-- Nombre del Club -->
+    <div class="form-group">
+      <label for="nombre">Nombre del Club</label>
+      <input
+        type="text"
+        id="nombre"
+        [(ngModel)]="nombre"
+        name="nombre"
+        class="form-control"
+        required
+        placeholder="Ingrese el nombre del club"
+      />
+    </div>
+
+    <!-- Correo Electrónico -->
+    <div class="form-group">
+      <label for="correo">Correo Electrónico</label>
+      <input
+        type="email"
+        id="correo"
+        [(ngModel)]="correo"
+        name="correo"
+        class="form-control"
+        required
+        placeholder="Ingrese el correo electrónico"
+      />
+    </div>
+
+    <!-- Certificado -->
+    <div class="form-group">
+      <label for="certificado">Certificado</label>
+      <input
+        type="file"
+        id="certificado"
+        (change)="onCertificadoChange($event)"
+        class="form-control"
+        required
+      />
+      <small class="form-text text-muted">Por favor, adjunte el certificado del club.</small>
+    </div>
+
+    <!-- Logotipo -->
+    <div class="form-group">
+      <label for="logotipo">Logotipo</label>
+      <input
+        type="file"
+        id="logotipo"
+        (change)="onLogotipoChange($event)"
+        class="form-control"
+        required
+      />
+      <small class="form-text text-muted">Por favor, adjunte el logotipo del club.</small>
+    </div>
+
+    <!-- Botón para Registrar -->
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!nombre || !correo || !certificado || !logotipo"
+    >
+      Registrar Club
+    </button>
+  </form>
+</div>
